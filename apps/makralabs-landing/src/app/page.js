@@ -1,65 +1,223 @@
+"use client";
+
+import { FaGithub } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { FaCopy } from "react-icons/fa";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    setEmail("ping@makralabs.org");
+  }, []);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
+    <div
+      className="min-h-screen"
+      style={{ backgroundColor: "var(--makra-background-light)" }}
+    >
+      <nav
+        className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
+        style={{ backgroundColor: "var(--makra-background-light)" }}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/logo/192x192.png"
+              alt="Makra Labs Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+            <div
+              className="text-2xl font-bold tracking-tight"
+              style={{
+                fontFamily: "var(--font-cormorant)",
+                color: "var(--makra-primary-green)",
+              }}
+            >
+              Makra
+              <span style={{ color: "var(--makra-foreground-dark)" }}>
+                labs
+              </span>
+            </div>
+          </div>
+          <div
+            className="hidden md:flex items-center gap-4 text-sm font-medium w-full justify-end"
+            style={{
+              fontFamily: "var(--font-open-sans)",
+              color: "var(--makra-foreground-dark-100)",
+            }}
+          >
+            <a
+              href="https://twitter.com/makralabs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-70 transition-opacity flex items-center gap-2"
+            >
+              <FaXTwitter size={20} />
+            </a>
+            <a
+              href="https://github.com/makralabs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-70 transition-opacity flex items-center gap-2"
+            >
+              <FaGithub size={20} />
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
+        <div className="max-w-5xl mx-auto text-center relative z-10 mt-[-20]">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 md:mb-8"
+            style={{
+              backgroundColor: "var(--makra-background-light-100)",
+              border: "1px solid var(--makra-background-light-200)",
+            }}
+          >
+            <span
+              className="w-2 h-2 rounded-full animate-pulse"
+              style={{ backgroundColor: "var(--makra-foreground-success)" }}
+            />
+            <span
+              className="text-sm font-medium"
+              style={{
+                fontFamily: "var(--font-open-sans)",
+                color: "var(--makra-foreground-dark-100)",
+              }}
+            >
+              We're on it!
+            </span>
+          </div>
+
+          <h1
+            className="text-4xl md:text-6xl font-bold tracking-tight mb-4 md:mb-8 flex flex-col"
+            style={{
+              fontFamily: "var(--font-cormorant)",
+              color: "var(--makra-foreground-dark)",
+            }}
+          >
+            <span style={{ color: "var(--makra-primary-green)" }}>
+              Navigate the web faster
+            </span>
+            <span
+              className="text-3xl md:text-5xl"
+              style={{ color: "var(--makra-foreground-dark-200)" }}
+            >
+              at a cost that is justified
+            </span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p
+            className="text-xs md:text-xl mb-4 md:mb-8 leading-relaxed flex flex-col"
+            style={{
+              fontFamily: "var(--font-open-sans)",
+              color: "var(--makra-foreground-dark-200)",
+              lineHeight: "1.4",
+            }}
+          >
+            <span>
+              Our mission is to{" "}
+              <strong>minimize the cost of AI knowledge retrieval</strong>,
+            </span>
+            <span>
+              and ultimately build an agentic browser that is affordable.
+            </span>
+          </p>
+
+          <p
+            className="text-xs md:text-xl mb-4 md:mb-8 leading-relaxed flex flex-row items-center justify-center gap-1"
+            style={{
+              fontFamily: "var(--font-open-sans)",
+              color: "var(--makra-foreground-dark-200)",
+              lineHeight: "1.4",
+            }}
+          >
+            <span>You can reach out to us at </span>
+            <snap>
+              {email && (
+                <span
+                  className="inline-flex items-center gap-2"
+                  style={{ position: "relative" }}
+                >
+                  <span className="underline">{email}</span>
+                  <button
+                    onClick={handleCopyEmail}
+                    className="hover:opacity-70 transition-opacity inline-flex items-center cursor-pointer"
+                    aria-label="Copy email to clipboard"
+                  >
+                    <FaCopy size={16} />
+                  </button>
+                  {copied && (
+                    <span
+                      className="text-sm"
+                      style={{
+                        color: "var(--makra-foreground-success)",
+                        position: "absolute",
+                        left: "100%",
+                        marginLeft: "0.5rem",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      Copied!
+                    </span>
+                  )}
+                </span>
+              )}
+            </snap>
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+      </section>
+
+      <footer
+        className="py-12 px-6"
+        style={{ backgroundColor: "var(--makra-background-dark-200)" }}
+      >
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src="/logo/192x192.png"
+              alt="Makra Labs Logo"
+              width={24}
+              height={24}
+              className="w-6 h-6"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div
+              className="text-xl font-bold tracking-tight"
+              style={{
+                fontFamily: "var(--font-cormorant)",
+                color: "var(--makra-foreground-light)",
+              }}
+            >
+              Makra
+              <span style={{ color: "var(--makra-primary-green-100)" }}>
+                labs
+              </span>
+            </div>
+          </div>
+          <p
+            className="text-sm"
+            style={{
+              fontFamily: "var(--font-open-sans)",
+              color: "var(--makra-foreground-light-200)",
+            }}
           >
-            Documentation
-          </a>
+            ⓒ 2025 Makra Labs
+          </p>
         </div>
-      </main>
+      </footer>
     </div>
   );
 }
