@@ -98,7 +98,7 @@ export default function Home() {
                 color: "var(--makra-foreground-dark-100)",
               }}
             >
-              We're on it!
+              We&apos;re on it!
             </span>
           </div>
 
@@ -121,7 +121,7 @@ export default function Home() {
           </h1>
 
           <p
-            className="text-xs md:text-xl mb-4 md:mb-8 leading-relaxed flex flex-col"
+            className="text-xs md:text-base mb-4 md:mb-8 leading-relaxed flex flex-col"
             style={{
               fontFamily: "var(--font-open-sans)",
               color: "var(--makra-foreground-dark-200)",
@@ -138,7 +138,7 @@ export default function Home() {
           </p>
 
           <p
-            className="text-xs md:text-xl mb-4 md:mb-8 leading-relaxed flex flex-row items-center justify-center gap-1"
+            className="text-xs md:text-base mb-4 md:mb-8 leading-relaxed flex flex-row items-center justify-center gap-1"
             style={{
               fontFamily: "var(--font-open-sans)",
               color: "var(--makra-foreground-dark-200)",

@@ -1,5 +1,6 @@
-import { Cormorant_Garamond, DM_Sans, Open_Sans } from "next/font/google";
+import { Cormorant_Garamond, Open_Sans } from "next/font/google";
 import "./globals.css";
+import PropTypes from "prop-types";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -35,3 +36,7 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+RootLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
