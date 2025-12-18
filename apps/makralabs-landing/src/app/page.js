@@ -52,7 +52,24 @@ export default function Home() {
             </div>
           </div>
           <div
-            className="hidden md:flex items-center gap-4 text-sm font-medium w-full justify-end"
+            className="hidden md:flex items-center gap-4 text-sm font-medium w-full justify-center"
+            style={{
+              fontFamily: "var(--font-open-sans)",
+              color: "var(--makra-foreground-dark-100)",
+            }}
+          >
+            <a
+              href="http://localhost:3001"
+              className="hover:opacity-70 transition-opacity px-4 py-2 rounded-lg"
+              style={{
+                backgroundColor: "var(--makra-background-light-200)",
+              }}
+            >
+              Docs
+            </a>
+          </div>
+          <div
+            className="hidden md:flex items-center gap-4 text-sm font-medium"
             style={{
               fontFamily: "var(--font-open-sans)",
               color: "var(--makra-foreground-dark-100)",
