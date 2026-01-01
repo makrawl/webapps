@@ -1,7 +1,5 @@
 "use client";
 
-import { FaGithub } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 import { FaCopy } from "react-icons/fa";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -21,81 +19,8 @@ export default function Home() {
   };
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--makra-background-light)" }}
-    >
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
-        style={{ backgroundColor: "var(--makra-background-light)" }}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/logo/192x192.png"
-              alt="Makra Labs Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8"
-            />
-            <div
-              className="text-2xl font-bold tracking-tight"
-              style={{
-                fontFamily: "var(--font-cormorant)",
-                color: "var(--makra-primary-green)",
-              }}
-            >
-              Makra
-              <span style={{ color: "var(--makra-foreground-dark)" }}>
-                labs
-              </span>
-            </div>
-          </div>
-          <div
-            className="hidden md:flex items-center gap-4 text-sm font-medium w-full justify-center"
-            style={{
-              fontFamily: "var(--font-open-sans)",
-              color: "var(--makra-foreground-dark-100)",
-            }}
-          >
-            <a
-              href="http://localhost:3001"
-              className="hover:opacity-70 transition-opacity px-4 py-2 rounded-lg"
-              style={{
-                backgroundColor: "var(--makra-background-light-200)",
-              }}
-            >
-              Docs
-            </a>
-          </div>
-          <div
-            className="hidden md:flex items-center gap-4 text-sm font-medium"
-            style={{
-              fontFamily: "var(--font-open-sans)",
-              color: "var(--makra-foreground-dark-100)",
-            }}
-          >
-            <a
-              href="https://twitter.com/makralabs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-70 transition-opacity flex items-center gap-2"
-            >
-              <FaXTwitter size={20} />
-            </a>
-            <a
-              href="https://github.com/makralabs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-70 transition-opacity flex items-center gap-2"
-            >
-              <FaGithub size={20} />
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
+    <>
+      <section className="relative min-h-screen flex items-center justify-center px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 w-full">
           <div className="flex-shrink-0 w-full md:w-1/2 order-1 md:order-2">
             <Image
@@ -173,7 +98,7 @@ export default function Home() {
               }}
             >
               <span>You can reach out to us at </span>
-              <snap>
+              <span>
                 {email && (
                   <span
                     className="inline-flex items-center gap-2"
@@ -203,7 +128,7 @@ export default function Home() {
                     )}
                   </span>
                 )}
-              </snap>
+              </span>
             </p>
           </div>
         </div>
@@ -246,6 +171,6 @@ export default function Home() {
           </p>
         </div>
       </footer>
-    </div>
+    </>
   );
 }

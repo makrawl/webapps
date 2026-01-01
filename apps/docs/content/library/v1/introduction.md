@@ -1,45 +1,61 @@
----
-title: Introduction to Library v1
-description: Get started with version 1 of the Makra Labs library
----
+**Hiro** is a network-attached distributed file system that stores large files by automatically splitting them into smaller chunks and distributing them across several computers on your network. When you upload a file, Hiro keeps track of where every piece is stored, so you can easily retrieve it later, even if some computers go offline. This makes it easy to build your own reliable, private cloud storage at home or in the office, using low-power devices like Raspberry Pis.
 
-# Introduction to Library v1
+<br>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/77adac3a-3e8b-48a9-822c-447225709e57" alt="Hiro-system" />
+</p>
 
-Welcome to the Makra Labs Library v1 documentation. This library provides powerful tools for building modern web applications.
+Much of Hiro’s architecture and design is inspired by the [Google File System (GFS)](https://research.google/pubs/pub51/), a scalable distributed file system developed by Google to support large, data-intensive applications. While Hiro is built for home labs and small-scale deployments, it adapts many of the core ideas from GFS. Its design leverages proven techniques such as file chunking, distributed metadata management, and redundancy to ensure data integrity and availability, even in environments with limited resources. With Hiro, users can build resilient, self-hosted storage solutions tailored to their specific use cases.
 
-## Getting Started
+## Getting started
 
-To get started with Library v1, you'll need to install it first:
+Clone the repository ..
 
-\`\`\`bash
-npm install @makralabs/library-v1
-\`\`\`
+```shell
+git clone https://github.com/ritsource/hiro.git
+```
 
-## Features
+```shell
+cd hiro
+```
 
-- **Fast Performance**: Optimized for speed and efficiency
-- **Type Safe**: Full TypeScript support
-- **Flexible**: Easy to customize and extend
-- **Well Documented**: Comprehensive documentation and examples
+### Starting up the servers
 
-## Quick Example
+To start all the servers and workers in local [docker](https://www.docker.com/), run ..
 
-Here's a quick example to get you started:
+```shell
+docker-compose up --build
+```
 
-\`\`\`typescript
-import { Library } from '@makralabs/library-v1';
+**Or,** we can also run the master and worker server using [Cargo (Rust)](https://doc.rust-lang.org/stable/cargo/), with the following commands ..
 
-const lib = new Library({
-  apiKey: 'your-api-key',
-});
+```shell
+cargo run -- --master --port 8080 --workers 127.0.0.1:5050,127.0.0.1:5051
+```
 
-const result = await lib.process();
-console.log(result);
-\`\`\`
+```shell
+cargo run -- --worker --port 5050 --master 127.0.0.1:8080
+cargo run -- --worker --port 5051 --master 127.0.0.1:8080
+cargo run -- --worker --port 5052 --master 127.0.0.1:8080
+```
 
-## Next Steps
+NOTE: worker needs a master address (127.0.0.1:8080), which you can pass using "--master" flag with address
 
-- Check out the [Examples](/library/v1/examples) to see more use cases
-- Read the [API Documentation](/library/v1/api_docs) for detailed reference
-- Join our community for support and updates
+**Upload a file using the client-cli**
 
+```shell
+cargo run -- --client ./data/demo.mp4 -m 127.0.0.1:8080
+```
+
+### Deployment
+
+Hiro can be deployed as a Network Attached File System (NAS), providing seamless storage and retrieval capabilities over your network. It comes with a powerful CLI client for easy interaction and management.
+
+<br>
+<p align="left">
+  <img width="300px" src="https://github.com/ritsource/hiro/assets/35898601/c5331c9b-fd4d-4693-a709-07cc96432d42" alt="raspi-cluster" />
+</p>
+
+For optimal scalability and reliability, Hiro is designed to run on a Kubernetes cluster. Our reference deployment uses a **6-node Raspberry Pi cluster**, making it both cost-effective and energy-efficient for home labs or edge computing.
+
+Interested in building your own Raspberry Pi Kubernetes cluster? Check out this comprehensive guide: [https://alexsniffin.medium.com/a-guide-to-building-a-kubernetes-cluster-with-raspberry-pis-23fa4938d420](https://alexsniffin.medium.com/a-guide-to-building-a-kubernetes-cluster-with-raspberry-pis-23fa4938d420).

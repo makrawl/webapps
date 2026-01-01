@@ -1,5 +1,6 @@
 import { Cormorant_Garamond, Open_Sans } from "next/font/google";
 import "./globals.css";
+import ClientLayout from "./client-layout";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -24,7 +25,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${cormorant.variable} ${openSans.variable} antialiased`}
       >
-        {children}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
