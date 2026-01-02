@@ -1,12 +1,12 @@
 @import "tailwindcss";
-@import "@repo/styles/variables.css";
 
-@theme inline {
-  --color-background: var(--makra-background-light);
-  --color-foreground: var(--makra-foreground-dark);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Scan for Tailwind classes in local components and shared UI package */
+@source "../components/**/*.{js,ts,jsx,tsx}";
+@source "../../../../packages/ui/src/**/*.{js,ts,jsx,tsx}";
+
+/* Import shared styles and Tailwind theme configuration */
+@import "@repo/styles/globals.css";
+@import "@repo/styles/tailwind-theme.css";
 
 body {
   background: var(--makra-background-light);
@@ -140,4 +140,3 @@ body {
   font-family: monospace !important;
   color: var(--makra-primary-green) !important;
 }
-

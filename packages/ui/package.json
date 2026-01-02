@@ -5,8 +5,7 @@
   "exports": {
     "./*": "./src/*.tsx",
     "./navbar": "./src/navbar/index.tsx",
-    "./input": "./src/input.tsx",
-    "./input-context": "./src/input-context.tsx"
+    "./input": "./src/input.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

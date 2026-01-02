@@ -73,13 +73,13 @@ export const Navbar = ({
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50"
+      className="fixed top-0 left-0 right-0 z-50 w-screen border border-red-500 flex justify-center"
       style={{
         height: "66px",
         backgroundColor: "var(--makra-background-light)",
       }}
     >
-      <div className="h-full w-[80%] flex flex-row items-center justify-between mx-auto">
+      <div className="h-full w-[80%] flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-4">
           <a href="/">
             <div className="flex items-center gap-2">
@@ -133,6 +133,7 @@ export const Navbar = ({
             target="_blank"
             rel="noopener noreferrer"
             className="hover:opacity-70 transition-opacity flex items-center gap-2"
+            style={{ color: "var(--makra-foreground-dark-100) !important" }}
           >
             <FaXTwitter size={20} />
           </a>
@@ -141,14 +142,15 @@ export const Navbar = ({
             target="_blank"
             rel="noopener noreferrer"
             className="hover:opacity-70 transition-opacity flex flex-row items-center relative"
+            style={{ color: "var(--makra-foreground-dark-100) !important" }}
           >
             <FaGithub size={20} />
-            <span className="text-xs ml-1">
+            <span className="text-xs pl-1">
               {starsCount > 0 ? starsCount.toLocaleString() : "0 ..."}
             </span>
           </a>
           <a href="/login">
-            <button className="bg-[var(--makra-primary-green)] text-white text-sm px-2 py-1  rounded-md cursor-pointer">
+            <button className="makra-web-btn-green text-white text-sm px-2 py-1  rounded-md cursor-pointer">
               Sign In
             </button>
           </a>

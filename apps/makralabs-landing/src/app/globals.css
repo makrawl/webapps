@@ -1,15 +1,8 @@
 @import "tailwindcss";
+
+/* Scan for Tailwind classes in the shared UI package */
 @source "../../../../packages/ui/src/**/*.{js,ts,jsx,tsx}";
-@import "@repo/styles/variables.css";
 
-@theme inline {
-  --color-background: var(--makra-background-light);
-  --color-foreground: var(--makra-foreground-dark);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-body {
-  background: var(--makra-background-light);
-  color: var(--makra-foreground-dark);
-}
+/* Import shared styles and Tailwind theme configuration */
+@import "@repo/styles/globals.css";
+@import "@repo/styles/tailwind-theme.css";

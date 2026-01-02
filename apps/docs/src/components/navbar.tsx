@@ -15,10 +15,9 @@ export function Navbar({ onMenuClick }: NavbarProps) {
 
   return (
     <nav
-      className="sticky top-0 z-50 border-b"
+      className="w-screen sticky top-0 z-50 border border-red-500"
       style={{
         backgroundColor: "var(--makra-background-light)",
-        borderColor: "var(--makra-background-light-200)",
       }}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">

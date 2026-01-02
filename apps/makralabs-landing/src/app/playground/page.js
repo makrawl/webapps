@@ -1,40 +1,23 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useInput } from "@repo/ui/input-context";
+import { useEffect } from "react";
+import { usePlaygroundStore } from "../../stores/playground";
 
 export default function Playground() {
-  const { submittedQuery } = useInput();
-  const [queryResult, setQueryResult] = useState(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const lastProcessedQueryRef = useRef("");
+  const { query, result, isProcessing, setResult } = usePlaygroundStore();
 
   useEffect(() => {
-    // Process query only when it's submitted (not on every input change)
-    if (submittedQuery && submittedQuery.trim()) {
-      const trimmedQuery = submittedQuery.trim();
-      if (trimmedQuery !== lastProcessedQueryRef.current) {
-        processQuery(trimmedQuery);
-        lastProcessedQueryRef.current = trimmedQuery;
-      }
-    } else {
-      // Reset when query is cleared
-      lastProcessedQueryRef.current = "";
-      setQueryResult(null);
-      setIsProcessing(false);
+    if (query && query.trim() && isProcessing) {
+      // Simulate query processing (replace with actual API call)
+      const timer = setTimeout(() => {
+        setResult(
+          `Query: "${query}"\n\nThis is where the query results would appear. You can integrate with your API here.`
+        );
+      }, 1000);
+
+      return () => clearTimeout(timer);
     }
-  }, [submittedQuery]);
-
-  const processQuery = async (query) => {
-    setIsProcessing(true);
-    setQueryResult(null);
-
-    // Simulate query processing (replace with actual API call)
-    setTimeout(() => {
-      setQueryResult(`Query: "${query}"\n\nThis is where the query results would appear. You can integrate with your API here.`);
-      setIsProcessing(false);
-    }, 1000);
-  };
+  }, [query, isProcessing, setResult]);
 
   return (
     <div className="min-h-screen px-6 py-8">
@@ -46,12 +29,10 @@ export default function Playground() {
             color: "var(--makra-foreground-dark)",
           }}
         >
-          <span style={{ color: "var(--makra-primary-green)" }}>
-            Playground
-          </span>
+          <span style={{ color: "var(--makra-primary-green)" }}>Playground</span>
         </h1>
 
-        {!submittedQuery || !submittedQuery.trim() ? (
+        {!query || !query.trim() ? (
           <div
             className="bg-white rounded-lg p-6 mb-6"
             style={{
@@ -98,7 +79,7 @@ export default function Playground() {
                   </p>
                 </div>
               </div>
-            ) : queryResult ? (
+            ) : result ? (
               <div
                 className="bg-white rounded-lg p-6 mb-6"
                 style={{
@@ -122,7 +103,7 @@ export default function Playground() {
                     color: "var(--makra-foreground-dark-100)",
                   }}
                 >
-                  {queryResult}
+                  {result}
                 </div>
               </div>
             ) : null}
@@ -151,7 +132,7 @@ export default function Playground() {
                   backgroundColor: "var(--makra-background-light-200)",
                 }}
               >
-                {submittedQuery}
+                {query}
               </p>
             </div>
           </>
@@ -160,4 +141,3 @@ export default function Playground() {
     </div>
   );
 }
-
