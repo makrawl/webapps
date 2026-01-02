@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState, useRef } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
@@ -12,6 +13,7 @@ interface NavbarProps {
   logoUrl?: string;
   twitterUrl?: string;
   githubUrl?: string;
+  githubRepo?: string;
   links?: NavbarLink[];
 }
 
@@ -19,12 +21,56 @@ export const Navbar = ({
   logoUrl = "/logo/192x192.png",
   twitterUrl = "https://twitter.com/makralabs",
   githubUrl = "https://github.com/makralabs",
+  githubRepo = "browser-use/browser-use",
   links = [
     { href: "/playground", label: "Playground" },
     { href: "/dashboard", label: "Dashboard" },
     { href: "/pricing", label: "Pricing" },
   ],
 }: NavbarProps) => {
+  const [starsCount, setStarsCount] = useState(0);
+  const animateRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    let targetStars = 0;
+
+    const fetchStarsCount = async () => {
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${githubRepo}`
+        );
+        if (!response.ok) return;
+        const data = await response.json();
+        targetStars = Number(data.stargazers_count) || 0;
+
+        if (targetStars > 0) {
+          let current = 0;
+          const increment = Math.max(1, Math.floor(targetStars / 30));
+          const animate = () => {
+            current += increment;
+            if (current >= targetStars) {
+              setStarsCount(targetStars);
+            } else {
+              setStarsCount(current);
+              animateRef.current = setTimeout(animate, 18);
+            }
+          };
+          animate();
+        } else {
+          setStarsCount(targetStars);
+        }
+      } catch {
+        console.error(`Failed to fetch stars count for ${githubRepo}`);
+      }
+    };
+    fetchStarsCount();
+    return () => {
+      if (animateRef.current) {
+        clearTimeout(animateRef.current);
+      }
+    };
+  }, [githubRepo]);
+
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50"
@@ -94,9 +140,12 @@ export const Navbar = ({
             href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:opacity-70 transition-opacity flex items-center gap-2"
+            className="hover:opacity-70 transition-opacity flex flex-row items-center relative"
           >
             <FaGithub size={20} />
+            <span className="text-xs ml-1">
+              {starsCount > 0 ? starsCount.toLocaleString() : "0 ..."}
+            </span>
           </a>
           <a href="/login">
             <button className="bg-[var(--makra-primary-green)] text-white text-sm px-2 py-1  rounded-md cursor-pointer">
