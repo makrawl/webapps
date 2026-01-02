@@ -27,15 +27,13 @@ export const Navbar = ({
 }: NavbarProps) => {
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 border border-red-500"
+      className="fixed top-0 left-0 right-0 z-50"
       style={{
         height: "66px",
         backgroundColor: "var(--makra-background-light)",
       }}
     >
-      <div
-        className="h-full w-[80%] flex flex-row items-center justify-between mx-auto border border-blue-500"
-      >
+      <div className="h-full w-[80%] flex flex-row items-center justify-between mx-auto">
         <div className="flex flex-row items-center gap-4">
           <a href="/">
             <div className="flex items-center gap-2">
@@ -99,6 +97,11 @@ export const Navbar = ({
             className="hover:opacity-70 transition-opacity flex items-center gap-2"
           >
             <FaGithub size={20} />
+          </a>
+          <a href="/login">
+            <button className="bg-[var(--makra-primary-green)] text-white text-sm px-2 py-1  rounded-md cursor-pointer">
+              Sign In
+            </button>
           </a>
         </div>
       </div>

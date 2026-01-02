@@ -19,7 +19,7 @@ export const metadata = {
   description: "Building sustainable solutions for tomorrow",
 };
 
-export default function RootLayout({ children }) {
+export default function HomePlaygroundLayout({ children }) {
   return (
     <html lang="en">
       <body
