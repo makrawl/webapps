@@ -12,20 +12,28 @@ function QueryFormSection() {
   const { inputValue, setInputValue, submitQuery } = usePlaygroundStore();
 
   const handleSubmit = (value: string) => {
-    submitQuery(value);
+    // Prepend https:// if not already present
+    const url = value.startsWith("http") ? value : `https://${value}`;
+    submitQuery(url);
     if (pathname === "/") {
       router.push("/playground");
     }
   };
 
+  const handleGetCode = () => {
+    // TODO: Implement get code functionality
+    console.log("Get code clicked");
+  };
+
   return (
-    <div className="px-6 py-4 border-b">
-      <div className="max-w-7xl mx-auto">
+    <div className="flex flex-row items-center justify-center">
+      <div className="max-w-[1000px] w-full">
         <QueryForm
           value={inputValue}
           onChange={setInputValue}
           onSubmit={handleSubmit}
-          placeholder="Enter your query or URL..."
+          onGetCode={handleGetCode}
+          placeholder="example.com"
           className="w-full"
           showSubmitButton
         />
@@ -43,7 +51,7 @@ export default function ClientLayout({
   const showQueryForm = pathname === "/" || pathname === "/playground";
 
   return (
-    <div className="min-h-screen min-w-screen makra-web-page-root">
+    <div className="min-h-screen min-w-screen makra-web-page-root border-2">
       <Navbar />
       {showQueryForm && <QueryFormSection />}
       <div className="pt-32">{children}</div>
