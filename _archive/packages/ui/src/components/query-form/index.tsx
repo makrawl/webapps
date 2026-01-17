@@ -124,7 +124,18 @@ export const QueryForm = ({
                                         : "var(--makra-foreground-dark-100)",
                             }}
                         >
-                            {segment.label}
+                            {segment.label && (
+                                <span
+                                    className="ml-2 px-1.5 py-0.5 text-xs rounded"
+                                    style={{
+                                        backgroundColor:
+                                            "var(--makra-background-light-200)",
+                                        color: "var(--makra-foreground-dark-100)",
+                                    }}
+                                >
+                                    {segment.badge}
+                                </span>
+                            )}
                             {segment.badge && (
                                 <span
                                     className="ml-2 px-1.5 py-0.5 text-xs rounded"

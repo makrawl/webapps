@@ -20,8 +20,11 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 w-full">
+      <section className="relative min-h-screen flex items-center justify-center px-6 border border-red-500">
+          <div className="h-full w-full flex flex-col items-center justify-center">
+              <p>Home Page Section 1</p>
+          </div>
+        {/*<div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 w-full">
           <div className="flex-shrink-0 w-full md:w-1/2 order-1 md:order-2">
             <Image
               src="/images/Makrawl-App-Flow.svg"
@@ -132,7 +135,14 @@ export default function Home() {
               </span>
             </p>
           </div>
-        </div>
+        </div>*/}
+      </section>
+
+
+      <section className="relative min-h-screen flex items-center justify-center px-6 border border-red-500">
+          <div className="h-full w-full flex flex-col items-center justify-center">
+              <p>Home Page Section 1</p>
+          </div>
       </section>
 
       <footer

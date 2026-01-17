@@ -6,7 +6,7 @@ import { Navbar } from "@/components/navbar";
 import { usePlaygroundStore } from "@/stores/playground";
 
 /** QueryForm section - only rendered on home/playground */
-function QueryFormSection() {
+function QueryFormSection({ isCompact }: { isCompact: boolean }) {
   const router = useRouter();
   const pathname = usePathname();
   const { inputValue, setInputValue, submitQuery } = usePlaygroundStore();
@@ -26,8 +26,13 @@ function QueryFormSection() {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center">
-      <div className="max-w-[1000px] w-full">
+    <div
+      className="w-full flex items-center justify-center transition-all duration-500 ease-in-out"
+      style={{
+        height: isCompact ? "300px" : "calc(100vh - 66px)",
+      }}
+    >
+      <div className="max-w-[1000px] w-full px-4">
         <QueryForm
           value={inputValue}
           onChange={setInputValue}
@@ -49,12 +54,15 @@ export default function ClientLayout({
 }) {
   const pathname = usePathname();
   const showQueryForm = pathname === "/" || pathname === "/playground";
+  const isPlayground = pathname === "/playground";
 
   return (
     <div className="min-h-screen min-w-screen makra-web-page-root">
       <Navbar />
-      {showQueryForm && <QueryFormSection />}
-      <div className="pt-32">{children}</div>
+      <div className="flex flex-col">
+        {showQueryForm && <QueryFormSection isCompact={isPlayground} />}
+        {children}
+      </div>
     </div>
   );
 }
