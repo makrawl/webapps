@@ -1,22 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { FiSettings, FiGrid, FiFileText } from "react-icons/fi";
 import { HiCode } from "react-icons/hi";
 import { cn } from "@/lib/utils";
+import { TextInput } from "@/components/ui";
+import { ExtractDataForm, QueryChunksForm, PageMapForm } from "./forms";
+import { usePlaygroundStore } from "@/stores/playground";
+import { OperationType } from "@/types/playground";
 
 interface QueryFormProps {
-  value: string;
-  onChange: (value: string) => void;
-  onSubmit?: (value: string) => void;
+  onSubmit?: () => void;
   onGetCode?: () => void;
   placeholder?: string;
   className?: string;
-  segments?: { value: string; label: string; badge?: string }[];
-  defaultSegment?: string;
-  onSegmentChange?: (value: string) => void;
   showSubmitButton?: boolean;
 }
+
+// Segment definitions
+const SEGMENTS: { value: OperationType; label: string }[] = [
+  { value: "data", label: "Extract Data" },
+  { value: "chunks", label: "Query Chunks" },
+  { value: "map", label: "Page-Map" },
+];
 
 // Tabs implementation
 function SegmentedTabs({
@@ -24,9 +30,9 @@ function SegmentedTabs({
   segments,
   onTabChange,
 }: {
-  value: string;
-  segments: { value: string; label: string; badge?: string }[];
-  onTabChange: (value: string) => void;
+  value: OperationType;
+  segments: { value: OperationType; label: string }[];
+  onTabChange: (value: OperationType) => void;
 }) {
   return (
     <div
@@ -66,17 +72,6 @@ function SegmentedTabs({
             onClick={() => onTabChange(segment.value)}
           >
             {segment.label}
-            {segment.badge && (
-              <span
-                className="ml-2 px-1.5 py-0.5 text-xs rounded"
-                style={{
-                  backgroundColor: "var(--makra-background-light-200)",
-                  color: "var(--makra-foreground-dark-100)",
-                }}
-              >
-                {segment.badge}
-              </span>
-            )}
           </button>
         );
       })}
@@ -84,93 +79,66 @@ function SegmentedTabs({
   );
 }
 
-// InputGroup replacement
-function InputGroupInline({
-  prefix,
-  inputProps,
-}: {
-  prefix?: React.ReactNode;
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-}) {
-  return (
-    <div className="relative flex items-center w-full">
-      {prefix && (
-        <span
-          className="absolute left-4 text-sm pointer-events-none select-none z-10"
-          style={{
-            fontFamily: "var(--font-open-sans)",
-            color: "var(--makra-foreground-dark-100)",
-          }}
-        >
-          {prefix}
-        </span>
-      )}
-      <input
-        {...inputProps}
-        className={cn(
-          prefix && "pl-20",
-          "flex-1 pr-4 py-3 rounded-lg border transition-all focus:outline-none focus:ring-2",
-          (inputProps && inputProps.className) || ""
-        )}
-        style={{
-          ...(inputProps?.style || {}),
-        }}
-      />
-    </div>
-  );
-}
-
 export function QueryForm({
-  value,
-  onChange,
   onSubmit,
   onGetCode,
   placeholder = "example.com",
   className = "",
-  segments = [
-    { value: "scrape", label: "Scrape" },
-    { value: "search", label: "Search" },
-    { value: "agent", label: "Agent", badge: "New" },
-    { value: "map", label: "Map" },
-    { value: "crawl", label: "Crawl" },
-  ],
-  defaultSegment = "scrape",
-  onSegmentChange,
   showSubmitButton = false,
 }: QueryFormProps) {
-  const [activeSegment, setActiveSegment] = useState(defaultSegment);
+  // Get state and actions from Zustand store
+  const {
+    url,
+    setUrl,
+    operationType,
+    setOperationType,
+    extractData,
+    setExtractData,
+    queryChunks,
+    setQueryChunks,
+    submitForm,
+  } = usePlaygroundStore();
 
-  const handleSegmentChange = (value: string) => {
+  // Component-level state for active segment (for rendering)
+  const [activeSegment, setActiveSegment] = useState<OperationType>(operationType);
+
+  const handleSegmentChange = (value: OperationType) => {
     setActiveSegment(value);
-    onSegmentChange?.(value);
+    setOperationType(value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (onSubmit && value.trim()) {
-      const url = value.startsWith("http") ? value : `https://${value}`;
-      onSubmit(url);
+    if (url.trim()) {
+      const formData = submitForm();
+      console.log("Form submitted:", formData);
+      onSubmit?.();
     }
   };
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    if (e.key === "Enter" && onSubmit && value.trim()) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && url.trim()) {
       e.preventDefault();
-      const url = value.startsWith("http") ? value : `https://${value}`;
-      onSubmit?.(url);
+      const formData = submitForm();
+      console.log("Form submitted:", formData);
+      onSubmit?.();
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = e.target.value;
-    // Remove https:// prefix for editing
-    if (newValue.startsWith("https://")) {
-      newValue = newValue.slice(8);
-    }
-    onChange(newValue);
-  };
+  // Memoize callbacks to prevent unnecessary re-renders
+  const handleExtractDataChange = useCallback(
+    (data: Parameters<typeof setExtractData>[0]) => {
+      setExtractData(data);
+    },
+    [setExtractData]
+  );
+
+  const handleQueryChunksChange = useCallback(
+    (data: Parameters<typeof setQueryChunks>[0]) => {
+      setQueryChunks(data);
+    },
+    [setQueryChunks]
+  );
 
   return (
     <form
@@ -180,28 +148,35 @@ export function QueryForm({
       {/* Segment Tabs */}
       <SegmentedTabs
         value={activeSegment}
-        segments={segments}
+        segments={SEGMENTS}
         onTabChange={handleSegmentChange}
       />
 
-      {/* URL Input with Prefix */}
-      <InputGroupInline
+      {/* URL Input - Common across all modes */}
+      <TextInput
+        value={url}
+        onChange={setUrl}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
         prefix="https://"
-        inputProps={{
-          type: "text",
-          value: value,
-          onChange: handleInputChange,
-          onKeyDown: handleKeyDown,
-          placeholder: placeholder,
-          className: cn("pl-20"),
-          style: {
-            fontFamily: "var(--font-open-sans)",
-            backgroundColor: "var(--makra-background-light)",
-            borderColor: "var(--makra-background-light-200)",
-            color: "var(--makra-foreground-dark)",
-          },
-        }}
       />
+
+      {/* Operation-specific forms */}
+      <div className="py-2">
+        {activeSegment === "data" && (
+          <ExtractDataForm
+            onFormChange={handleExtractDataChange}
+            initialState={extractData}
+          />
+        )}
+        {activeSegment === "chunks" && (
+          <QueryChunksForm
+            onFormChange={handleQueryChunksChange}
+            initialState={queryChunks}
+          />
+        )}
+        {activeSegment === "map" && <PageMapForm />}
+      </div>
 
       {/* Controls Row */}
       <div className="flex items-center justify-between">
@@ -262,7 +237,7 @@ export function QueryForm({
           {showSubmitButton && (
             <button
               type="submit"
-              disabled={!value.trim()}
+              disabled={!url.trim()}
               className="px-6 py-2 rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 makra-web-btn-green"
               style={{
                 fontFamily: "var(--font-open-sans)",

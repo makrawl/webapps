@@ -4,20 +4,20 @@ import { useEffect } from "react";
 import { usePlaygroundStore } from "@/stores/playground";
 
 export default function Playground() {
-  const { query, result, isProcessing, setResult } = usePlaygroundStore();
+  const { url, result, isProcessing, setResult } = usePlaygroundStore();
 
   useEffect(() => {
-    if (query && query.trim() && isProcessing) {
+    if (url && url.trim() && isProcessing) {
       // Simulate query processing (replace with actual API call)
       const timer = setTimeout(() => {
         setResult(
-          `Query: "${query}"\n\nThis is where the query results would appear. You can integrate with your API here.`
+          `URL: "${url}"\n\nThis is where the query results would appear. You can integrate with your API here.`
         );
       }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [query, isProcessing, setResult]);
+  }, [url, isProcessing, setResult]);
 
   return (
     <div className="min-h-screen px-6 py-8">
@@ -32,7 +32,7 @@ export default function Playground() {
           <span style={{ color: "var(--makra-primary-green)" }}>Playground</span>
         </h1>
 
-        {!query || !query.trim() ? (
+        {!url || !url.trim() ? (
           <div
             className="bg-white rounded-lg p-6 mb-6"
             style={{
@@ -47,7 +47,7 @@ export default function Playground() {
                 color: "var(--makra-foreground-dark-100)",
               }}
             >
-              Enter a query in the input above to get started.
+              Enter a URL in the input above to get started.
             </p>
           </div>
         ) : (
@@ -75,7 +75,7 @@ export default function Playground() {
                       color: "var(--makra-foreground-dark-100)",
                     }}
                   >
-                    Processing your query...
+                    Processing your request...
                   </p>
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function Playground() {
                     color: "var(--makra-foreground-dark)",
                   }}
                 >
-                  Query Results
+                  Results
                 </h2>
                 <div
                   className="text-base whitespace-pre-wrap"
@@ -122,7 +122,7 @@ export default function Playground() {
                   color: "var(--makra-foreground-dark)",
                 }}
               >
-                Current Query
+                Current URL
               </h2>
               <p
                 className="text-base font-mono p-3 rounded"
@@ -132,7 +132,7 @@ export default function Playground() {
                   backgroundColor: "var(--makra-background-light-200)",
                 }}
               >
-                {query}
+                {url}
               </p>
             </div>
           </>
