@@ -1,0 +1,8 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# is not top-most EditorConfig file
+# root = true
+
+[*]
+indent_size = 4
+quote_type = double
