@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, memo } from "react";
 import { FiSettings, FiGrid, FiFileText } from "react-icons/fi";
 import { HiCode } from "react-icons/hi";
 import { cn } from "@/lib/utils";
@@ -25,7 +25,7 @@ const SEGMENTS: { value: OperationType; label: string }[] = [
 ];
 
 // Tabs implementation
-function SegmentedTabs({
+const SegmentedTabs = memo(function SegmentedTabs({
   value,
   segments,
   onTabChange,
@@ -77,9 +77,9 @@ function SegmentedTabs({
       })}
     </div>
   );
-}
+});
 
-export function QueryForm({
+function QueryFormComponent({
   onSubmit,
   onGetCode,
   placeholder = "example.com",
@@ -153,13 +153,15 @@ export function QueryForm({
       />
 
       {/* URL Input - Common across all modes */}
-      <TextInput
-        value={url}
-        onChange={setUrl}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        prefix="https://"
-      />
+      <div>
+        <TextInput
+          value={url}
+          onChange={setUrl}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          prefix="https://"
+        />
+      </div>
 
       {/* Operation-specific forms */}
       <div className="py-2">
@@ -252,3 +254,5 @@ export function QueryForm({
     </form>
   );
 }
+
+export const QueryForm = memo(QueryFormComponent);

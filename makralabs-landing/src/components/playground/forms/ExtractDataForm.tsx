@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useMemo, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Checkbox,
   Select,
@@ -14,6 +15,18 @@ import {
   MODEL_OPTIONS,
   ExtractDataFormState,
 } from "@/types/playground";
+import {
+  elementVariants,
+  getElementTransition,
+  getElementExitTransition,
+  TOTAL_TRANSITION_TIME,
+} from "../animations";
+import {
+  VisibilityState,
+  calculateAverageTimePerElement,
+  updateVisibilityWithStagger,
+  createInitialVisibilityState,
+} from "../visibilityManager";
 
 interface ExtractDataFormProps {
   onFormChange: (data: Partial<ExtractDataFormState>) => void;
@@ -25,7 +38,7 @@ const SCHEMA_INPUT_OPTIONS: { value: SchemaInputMode; label: string }[] = [
   { value: "prompt", label: "Prompt" },
 ];
 
-export function ExtractDataForm({
+function ExtractDataFormComponent({
   onFormChange,
   initialState,
 }: ExtractDataFormProps) {
@@ -45,6 +58,31 @@ export function ExtractDataForm({
   const [selectedModel, setSelectedModel] = useState<ModelType>(
     initialState?.selectedModel ?? "gpt-4o"
   );
+
+  // Visibility state for all form elements
+  const elementKeys = useMemo(() => [
+    "schema_auto",
+    "schema_selector",
+    "schema_code",
+    "schema_prompt",
+    "pagination_nav",
+    "model_selection",
+  ], []);
+
+  const [visibilityState, setVisibilityState] = useState<VisibilityState>(() => {
+    // Always visible: schema_auto, pagination_nav, model_selection
+    // Conditionally visible: schema_selector, schema_code, schema_prompt
+    return {
+      schema_auto: true,
+      schema_selector: !autoSchema,
+      schema_code: !autoSchema && schemaInputMode === "schema",
+      schema_prompt: !autoSchema && schemaInputMode === "prompt",
+      pagination_nav: true,
+      model_selection: true,
+    };
+  });
+
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   // Sync state changes to parent via zustand
   useEffect(() => {
@@ -68,27 +106,134 @@ export function ExtractDataForm({
     onFormChange,
   ]);
 
+  // Update visibility state when autoSchema changes
+  useEffect(() => {
+    // Cleanup previous animations
+    if (cleanupRef.current) {
+      cleanupRef.current();
+    }
+
+    const keysToUpdate: string[] = [];
+    let targetVisibility = false;
+
+    if (autoSchema) {
+      // Hiding schema inputs - forward order (top to bottom)
+      if (schemaInputMode === "schema") {
+        keysToUpdate.push("schema_code", "schema_selector");
+      } else {
+        keysToUpdate.push("schema_prompt", "schema_selector");
+      }
+      targetVisibility = false;
+    } else {
+      // Showing schema inputs - forward order (top to bottom): selector first, then code/prompt
+      keysToUpdate.push("schema_selector");
+      if (schemaInputMode === "schema") {
+        keysToUpdate.push("schema_code");
+      } else {
+        keysToUpdate.push("schema_prompt");
+      }
+      targetVisibility = true;
+    }
+
+    if (keysToUpdate.length > 0) {
+      cleanupRef.current = updateVisibilityWithStagger(
+        keysToUpdate,
+        targetVisibility,
+        (key, visible) => {
+          setVisibilityState(prev => ({ ...prev, [key]: visible }));
+        }
+      );
+    }
+
+    return () => {
+      if (cleanupRef.current) {
+        cleanupRef.current();
+      }
+    };
+  }, [autoSchema, schemaInputMode]);
+
+  // Update visibility when schemaInputMode changes (only if autoSchema is false)
+  useEffect(() => {
+    if (!autoSchema) {
+      // Cleanup previous animations
+      if (cleanupRef.current) {
+        cleanupRef.current();
+      }
+
+      const hideKey = schemaInputMode === "schema" ? "schema_prompt" : "schema_code";
+      const showKey = schemaInputMode === "schema" ? "schema_code" : "schema_prompt";
+
+      // First hide the one that's not selected, then show the selected one
+      cleanupRef.current = updateVisibilityWithStagger(
+        [hideKey],
+        false,
+        (key, visible) => {
+          setVisibilityState(prev => ({ ...prev, [key]: visible }));
+        },
+        () => {
+          // After hiding, show the selected one
+          setVisibilityState(prev => ({ ...prev, [showKey]: true }));
+        }
+      );
+    }
+  }, [schemaInputMode, autoSchema]);
+
+  const elementTransition = getElementTransition();
+  const elementExitTransition = getElementExitTransition();
+
   return (
     <div className="flex flex-col gap-4">
       {/* Auto Schema Checkbox */}
-      <Checkbox
-        label="Auto schema"
-        checked={autoSchema}
-        onChange={setAutoSchema}
-      />
+      <AnimatePresence>
+        {visibilityState.schema_auto && (
+          <motion.div
+            key="schema_auto"
+            variants={elementVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={elementTransition}
+          >
+            <Checkbox
+              label="Auto schema"
+              checked={autoSchema}
+              onChange={setAutoSchema}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Schema/Prompt inputs - only show when auto schema is disabled */}
-      {!autoSchema && (
-        <div className="flex flex-col gap-3">
-          {/* Tab switch for Schema/Prompt */}
-          <TabSwitch
-            value={schemaInputMode}
-            onChange={setSchemaInputMode}
-            options={SCHEMA_INPUT_OPTIONS}
-          />
+      {/* Tab switch for Schema/Prompt */}
+      <AnimatePresence>
+        {visibilityState.schema_selector && (
+          <motion.div
+            key="schema_selector"
+            variants={elementVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={elementTransition}
+          >
+            <TabSwitch
+              value={schemaInputMode}
+              onChange={setSchemaInputMode}
+              options={SCHEMA_INPUT_OPTIONS}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Schema input with CodeMirror */}
-          {schemaInputMode === "schema" && (
+      {/* Schema Code Editor */}
+      <AnimatePresence>
+        {visibilityState.schema_code && (
+          <motion.div
+            key="schema_code"
+            variants={elementVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={elementTransition}
+          >
             <CodeMirrorEditor
               value={schema}
               onChange={setSchema}
@@ -98,41 +243,79 @@ export function ExtractDataForm({
                 href: "#", // TODO: Add actual link
               }}
             />
-          )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Prompt input as plain textarea */}
-          {schemaInputMode === "prompt" && (
+      {/* Schema Prompt TextArea */}
+      <AnimatePresence>
+        {visibilityState.schema_prompt && (
+          <motion.div
+            key="schema_prompt"
+            variants={elementVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={elementTransition}
+          >
             <TextArea
               value={prompt}
               onChange={setPrompt}
               placeholder="Enter your extraction prompt..."
               rows={6}
             />
-          )}
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Pagination and Navigation checkboxes */}
-      <div className="flex flex-col gap-2">
-        <Checkbox
-          label="Enable Pagination"
-          checked={enablePagination}
-          onChange={setEnablePagination}
-        />
-        <Checkbox
-          label="Enable Navigation"
-          checked={enableNavigation}
-          onChange={setEnableNavigation}
-        />
-      </div>
+      <AnimatePresence>
+        {visibilityState.pagination_nav && (
+          <motion.div
+            key="pagination_nav"
+            variants={elementVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={elementTransition}
+            className="flex flex-col gap-2"
+          >
+            <Checkbox
+              label="Enable Pagination"
+              checked={enablePagination}
+              onChange={setEnablePagination}
+            />
+            <Checkbox
+              label="Enable Navigation"
+              checked={enableNavigation}
+              onChange={setEnableNavigation}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Model Selection */}
-      <Select
-        label="Select Model"
-        value={selectedModel}
-        onChange={setSelectedModel}
-        options={MODEL_OPTIONS}
-      />
+      <AnimatePresence>
+        {visibilityState.model_selection && (
+          <motion.div
+            key="model_selection"
+            variants={elementVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={elementTransition}
+          >
+            <Select
+              label="Select Model"
+              value={selectedModel}
+              onChange={setSelectedModel}
+              options={MODEL_OPTIONS}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
+
+export const ExtractDataForm = memo(ExtractDataFormComponent);
