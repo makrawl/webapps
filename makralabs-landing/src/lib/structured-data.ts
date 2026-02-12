@@ -1,0 +1,82 @@
+import { WithContext, Organization, Product, WebSite } from "schema-dts";
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://makralabs.org";
+
+export const organizationSchema: WithContext<Organization> = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Makra Labs",
+  url: baseUrl,
+  logo: `${baseUrl}/logo/192x192.png`,
+  description:
+    "Building AI-powered tools for developers. Creators of Makra, a memory layer for AI agents.",
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "ping@makralabs.org",
+    contactType: "Customer Support",
+  },
+  sameAs: [
+    // Add social media profiles when available
+    // "https://twitter.com/makralabs",
+    // "https://github.com/makralabs",
+  ],
+};
+
+export const websiteSchema: WithContext<WebSite> = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Makra",
+  url: baseUrl,
+  description:
+    "Memory layer for AI agents. Save tokens with smart retrieval instead of raw HTML.",
+  publisher: {
+    "@type": "Organization",
+    name: "Makra Labs",
+    logo: {
+      "@type": "ImageObject",
+      url: `${baseUrl}/logo/192x192.png`,
+    },
+  },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${baseUrl}/search?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
+
+export const productSchema: WithContext<Product> = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Makra",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Cross-platform",
+  description:
+    "Makra is a memory layer between the web and your AI agents. Save tokens by using smart retrieval instead of dumping raw HTML into context windows.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+    description: "Currently in beta. Contact us for access.",
+  },
+  author: {
+    "@type": "Organization",
+    name: "Makra Labs",
+    url: baseUrl,
+  },
+  audience: {
+    "@type": "Audience",
+    audienceType: "AI Developers",
+  },
+  featureList: [
+    "Token optimization for AI agents",
+    "Smart data retrieval from web sources",
+    "Structured data extraction",
+    "Context management for LLMs",
+    "API-based integration",
+  ],
+  screenshot: `${baseUrl}/images/where-makra-fits.drawio.svg`,
+};

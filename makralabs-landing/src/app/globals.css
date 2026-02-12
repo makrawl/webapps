@@ -78,13 +78,26 @@ select {
 
 a {
     color: inherit;
-    text-decoration: none;
     cursor: pointer;
 }
 
 a:hover {
+    text-decoration: none;
     color: var(--makra-primary-green);
 }
+
+.text-primary-green {
+    color: var(--makra-primary-green);
+}
+
+.old-school-link {
+    color: var(--makra-primary-green);
+}
+.old-school-link:hover {
+    color: var(--makra-primary-green);
+    text-decoration: underline;
+}
+
 
 .default-link {
     color: inherit;

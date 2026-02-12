@@ -23,55 +23,55 @@ export function Navbar({
   logoUrl = "/logo/192x192.png",
   twitterUrl = "https://twitter.com/makralabs",
   githubUrl = "https://github.com/makralabs",
-  githubRepo = "browser-use/browser-use",
+  githubRepo = "makralabs/makra",
   links = [
-    { href: "/playground", label: "Playground" },
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/pricing", label: "Pricing" },
+    // { href: "/playground", label: "Playground" },
+    // { href: "/dashboard", label: "Dashboard" },
+    // { href: "/pricing", label: "Pricing" },
   ],
 }: NavbarProps) {
   const [starsCount, setStarsCount] = useState(0);
   const animateRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    let targetStars = 0;
+  // useEffect(() => {
+  //   let targetStars = 0;
 
-    const fetchStarsCount = async () => {
-      try {
-        const response = await fetch(
-          `https://api.github.com/repos/${githubRepo}`
-        );
-        if (!response.ok) return;
-        const data = await response.json();
-        targetStars = Number(data.stargazers_count) || 0;
+  //   const fetchStarsCount = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `https://api.github.com/repos/${githubRepo}`
+  //       );
+  //       if (!response.ok) return;
+  //       const data = await response.json();
+  //       targetStars = Number(data.stargazers_count) || 0;
 
-        if (targetStars > 0) {
-          let current = 0;
-          const increment = Math.max(1, Math.floor(targetStars / 30));
-          const animate = () => {
-            current += increment;
-            if (current >= targetStars) {
-              setStarsCount(targetStars);
-            } else {
-              setStarsCount(current);
-              animateRef.current = setTimeout(animate, 18);
-            }
-          };
-          animate();
-        } else {
-          setStarsCount(targetStars);
-        }
-      } catch {
-        console.error(`Failed to fetch stars count for ${githubRepo}`);
-      }
-    };
-    fetchStarsCount();
-    return () => {
-      if (animateRef.current) {
-        clearTimeout(animateRef.current);
-      }
-    };
-  }, [githubRepo]);
+  //       if (targetStars > 0) {
+  //         let current = 0;
+  //         const increment = Math.max(1, Math.floor(targetStars / 30));
+  //         const animate = () => {
+  //           current += increment;
+  //           if (current >= targetStars) {
+  //             setStarsCount(targetStars);
+  //           } else {
+  //             setStarsCount(current);
+  //             animateRef.current = setTimeout(animate, 18);
+  //           }
+  //         };
+  //         animate();
+  //       } else {
+  //         setStarsCount(targetStars);
+  //       }
+  //     } catch {
+  //       console.error(`Failed to fetch stars count for ${githubRepo}`);
+  //     }
+  //   };
+  //   fetchStarsCount();
+  //   return () => {
+  //     if (animateRef.current) {
+  //       clearTimeout(animateRef.current);
+  //     }
+  //   };
+  // }, [githubRepo]);
 
   return (
     <nav
@@ -147,15 +147,15 @@ export function Navbar({
             style={{ color: "var(--makra-foreground-dark-100)" }}
           >
             <FaGithub size={20} />
-            <span className="text-xs pl-1">
+            {/*<span className="text-xs pl-1">
               {starsCount > 0 ? starsCount.toLocaleString() : "0 ..."}
-            </span>
+            </span>*/}
           </a>
-          <Link href="/login">
+          {/*<Link href="/login">
             <button className="makra-web-btn-green text-white text-sm px-2 py-1 rounded-md cursor-pointer">
               Sign In
             </button>
-          </Link>
+          </Link>*/}
         </div>
       </div>
     </nav>
