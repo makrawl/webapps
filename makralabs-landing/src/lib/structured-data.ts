@@ -1,4 +1,4 @@
-import { WithContext, Organization, Product, WebSite } from "schema-dts";
+import type { WithContext, Organization, SoftwareApplication, WebSite } from "schema-dts";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://makralabs.org";
 
@@ -13,13 +13,8 @@ export const organizationSchema: WithContext<Organization> = {
   contactPoint: {
     "@type": "ContactPoint",
     email: "ping@makralabs.org",
-    contactType: "Customer Support",
+    contactType: "customer support",
   },
-  sameAs: [
-    // Add social media profiles when available
-    // "https://twitter.com/makralabs",
-    // "https://github.com/makralabs",
-  ],
 };
 
 export const websiteSchema: WithContext<WebSite> = {
@@ -37,17 +32,9 @@ export const websiteSchema: WithContext<WebSite> = {
       url: `${baseUrl}/logo/192x192.png`,
     },
   },
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `${baseUrl}/search?q={search_term_string}`,
-    },
-    "query-input": "required name=search_term_string",
-  },
 };
 
-export const productSchema: WithContext<Product> = {
+export const productSchema: WithContext<SoftwareApplication> = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Makra",
@@ -60,23 +47,10 @@ export const productSchema: WithContext<Product> = {
     price: "0",
     priceCurrency: "USD",
     availability: "https://schema.org/InStock",
-    description: "Currently in beta. Contact us for access.",
   },
   author: {
     "@type": "Organization",
     name: "Makra Labs",
     url: baseUrl,
   },
-  audience: {
-    "@type": "Audience",
-    audienceType: "AI Developers",
-  },
-  featureList: [
-    "Token optimization for AI agents",
-    "Smart data retrieval from web sources",
-    "Structured data extraction",
-    "Context management for LLMs",
-    "API-based integration",
-  ],
-  screenshot: `${baseUrl}/images/where-makra-fits.drawio.svg`,
 };
