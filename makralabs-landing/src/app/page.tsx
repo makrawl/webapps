@@ -116,10 +116,10 @@ export default function Home() {
                 }}
             />
 
-            <section className="relative min-h-screen flex items-center justify-center px-6">
-                <div className="max-w-[80%] w-full flex flex-row justify-center gap-50">
+            <section className="relative min-h-screen flex items-center justify-center px-4 lg:px-6 py-12 lg:py-0">
+                <div className="max-w-[90%] lg:max-w-[80%] w-full flex flex-col lg:flex-row items-start lg:items-stretch justify-center gap-8 lg:gap-50">
                     {/* Left Half - Production Pitch */}
-                    <div className="flex flex-col justify-center">
+                    <div className="flex flex-col justify-center order-2 lg:order-1">
                         {/* Eyebrow */}
                         <div className="flex items-center gap-3 mb-6 pb-2">
                             <span
@@ -267,7 +267,7 @@ export default function Home() {
                     </div>*/}
 
                     {/* Right Half - Diagram */}
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-start lg:justify-center mb-8 lg:mb-0 order-1 lg:order-2">
                         <div
                             style={{
                                 overflow: "hidden",
@@ -278,10 +278,7 @@ export default function Home() {
                                 alt="Where Makra fits in the workflow"
                                 width={600}
                                 height={400}
-                                style={{
-                                    width: "auto",
-                                    height: "400px"
-                                }}
+                                className="w-[200px] h-auto lg:w-auto lg:h-[400px]"
                             />
                         </div>
                     </div>

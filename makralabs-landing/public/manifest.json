@@ -1,7 +1,7 @@
 {
-  "name": "Makra - Memory Layer for AI Agents",
+  "name": "Makra - Memory Layer Between the Web and AI",
   "short_name": "Makra",
-  "description": "Save tokens with smart retrieval. Memory layer for AI agents.",
+  "description": "Save tokens with smart retrieval. Memory Layer Between the Web and AI.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

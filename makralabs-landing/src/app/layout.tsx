@@ -20,7 +20,7 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://makralabs.org"),
   title: {
-    default: "Makra - Memory Layer for AI Agents | Save Tokens with Smart Retrieval",
+    default: "Makra - Memory Layer Between the Web and AI | Save Tokens with Smart Retrieval",
     template: "%s | Makra",
   },
   description:
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: "Makra",
-    title: "Makra - Memory Layer for AI Agents",
+    title: "Makra - Memory Layer Between the Web and AI",
     description:
       "Save tokens by using smart retrieval instead of raw HTML. Makra handles the context, so your AI agents can focus on the data.",
     images: [
@@ -58,13 +58,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Makra - Memory Layer for AI Agents",
+        alt: "Makra - Memory Layer Between the Web and AI",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Makra - Memory Layer for AI Agents",
+    title: "Makra - Memory Layer Between the Web and AI",
     description:
       "Save tokens by using smart retrieval instead of raw HTML. Built for AI developers.",
     images: ["/twitter-image.png"],

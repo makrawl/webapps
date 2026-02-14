@@ -23,7 +23,7 @@ export const websiteSchema: WithContext<WebSite> = {
   name: "Makra",
   url: baseUrl,
   description:
-    "Memory layer for AI agents. Save tokens with smart retrieval instead of raw HTML.",
+    "Memory Layer Between the Web and AI. Save tokens with smart retrieval instead of raw HTML.",
   publisher: {
     "@type": "Organization",
     name: "Makra Labs",
